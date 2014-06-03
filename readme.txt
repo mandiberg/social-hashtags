@@ -1,4 +1,4 @@
-=== Social Hashtags ===
+==== Social Hashtags ====
 Contributors: shanaver, mandiberg
 Tags: instagram, youtube, hashtags, videos, photos, images, API, twitter, teleportd
 Requires at least: 3.0.1
