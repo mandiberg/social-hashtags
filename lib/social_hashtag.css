@@ -1,14 +1,21 @@
 
 .the-social-posts {
 
-
 }
 
-div.a-social-post, div.a-social-post img {
+div.a-social-post {
 	float: left;
-	width: 350px;
+	width: 330px;
+	Padding: 15px;
 
 }
+
+
+div.a-social-post img {
+	width: 300px;
+
+}
+
 
 .clear {
 
