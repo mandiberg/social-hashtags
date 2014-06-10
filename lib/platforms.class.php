@@ -64,14 +64,8 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     $this->unset_variables();
     
     if( is_array($response_object->entities->media) ){
-      // $email = "media->media_url    ";
-      // $email .= (string)$response_object->entities->media->media_url;
-      // $email .=" 0->   " . $response_object->entities->media[0]->media_url;
-      // $email .= " [mu]    "  . $response_object->entities->media[0]['media_url'];
       $this->pic_thumb            = $response_object->entities->media[0]->media_url . ":thumb";
       $this->pic_full             = $response_object->entities->media[0]->media_url;
-          // mail("jkiritharan@gmail.com", "what is the mediaurl", $this->pic_full);
-
     }
     else{
       $no_pic = $response_object->text;
@@ -85,14 +79,11 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     $pattern = "/\#([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
     $clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
-    // $str = (string)(rand(1,1000000000));
-    // $sha = sha1($str, TRUE);
     
     $this->pic_strs             = str_replace("#", "", $hashtags_in_title[0]);
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
-    $this->pic_handle           = $response_object->user->screen_name;
-    $this->pic_handle=preg_replace('/[^\pL\p{Zs}]+/u', '', $this->pic_handle);
-    $this->pic_username         = $response_object->user->name;
+    $this->pic_handle           = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->screen_name);
+    $this->pic_username         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->name);
     $this->pic_sha              = $response_object->id;
     $this->pic_handle_avatar    = $response_object->user->profile_image_url;
     $this->pic_handle_platform  = 'twitter';
@@ -107,8 +98,9 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
         array_push($this->pic_tags, $tag->text);
       }      
     }
-    $this->pic_full_title         = $response_object->text;
+    $this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
     $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->source . ' using ' . $this->pic_handle_platform);
+
 
     return true;
   }

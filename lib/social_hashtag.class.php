@@ -1,8 +1,11 @@
 <?php
 /*
  * @author      Bryan Shanaver <bryan[at]fiftyandfifty[dot]org>
+ * @edited by Jonathan Kiritharan <jkiritharan[at]gmail[dot]com> in June 2014
  */
 
+//I was having some problems figuring out how to return an error or any data back while testing on wp-admin->settings->social-hashtags alert box
+//sending an email worked best in returning code and variables I wanted to see : mail("yourName@mailinator.com", "subject", (string)print_r($variable,true));
 if( !class_exists('SOCIAL_HASHTAG_CACHE') ) {
 class SOCIAL_HASHTAG_CACHE {
   
@@ -141,9 +144,6 @@ class SOCIAL_HASHTAG_CACHE {
               continue; 
             }
           }
-          mail("jkiritharan@gmail.com", "0", "nothing");
-          // return $platform->pic_thumb;
-          mail("jkiritharan@gmail.com", "this Response Obj", (string)print_r($platform,true));
           $retrieved++;
           // Check to see if this user is blacklisted, skip to the next on if so   
           if( count($blacklist) ){    
@@ -163,7 +163,6 @@ class SOCIAL_HASHTAG_CACHE {
           // Check to see if we already have this photo, skip to the next one if we do
           $existing_photo = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key = 'social_hashtag_sha' and meta_value = %s", $platform->pic_sha ) );          
           if( count($existing_photo) >= 1 ){ if($plugin_options['debug_on']){
-            mail("jkiritharan@gmail.com", "already existing", (string)print_r($platform,true));
             social_hashtag_logging($platform->pic_full_title . "\n[not added] we already have this one ", 1); } 
             continue; 
           }
@@ -186,7 +185,6 @@ class SOCIAL_HASHTAG_CACHE {
           }else{
             unset($full_imagesize);
           }
-          mail("jkiritharan@gmail.com", "4", "nothing");
           // if there is a large image, process it
           if( $platform->pic_full != '' ) {
             $full_imagesize = getimagesize($platform->pic_full);
@@ -200,7 +198,6 @@ class SOCIAL_HASHTAG_CACHE {
             unset($thumb_imagesize);
             $post_content = $platform->pic_full_title;
           }
-          mail("jkiritharan@gmail.com", "5", "nothing");
           $post = array(
            'post_author' => 1,
            'post_date' => $platform->pic_mysqldate ,
@@ -210,7 +207,6 @@ class SOCIAL_HASHTAG_CACHE {
            'post_status' => ($plugin_options['always_private'] == 'No' ? 'publish' : 'private' ),
           );
           $post_id = wp_insert_post( $post, true );
-          mail("jkiritharan@gmail.com", "6", "nothing");
           add_post_meta($post_id, 'social_hashtag_sha', $platform->pic_sha, true);
           add_post_meta($post_id, 'social_hashtag_platform', $platform->pic_handle_platform, true);
           add_post_meta($post_id, 'social_hashtag_userhandle', $platform->pic_handle, true);
@@ -218,7 +214,6 @@ class SOCIAL_HASHTAG_CACHE {
           if( $platform->vid_embed ) {
             add_post_meta($post_id, 'social_hashtag_vid_embed', $platform->vid_embed, true);
           }
-          mail("jkiritharan@gmail.com", "7", "nothing");
           if( $platform->pic_full && $full_imagesize ) {
             add_post_meta($post_id, 'social_hashtag_full_url', $platform->pic_full, true);
             add_post_meta($post_id, 'social_hashtag_full_imagesize', ('w'.$full_imagesize[0].'xh'.$full_imagesize[1]), true);
@@ -238,7 +233,6 @@ class SOCIAL_HASHTAG_CACHE {
             add_post_meta($post_id, 'social_hashtag_thumb_url', $platform->pic_thumb, true);
             add_post_meta($post_id, 'social_hashtag_thumb_imagesize', ('w'.$thumb_imagesize[0].'xh'.$thumb_imagesize[1]), true);
           }
-          mail("jkiritharan@gmail.com", "9", "nothing");
           $category_ids = array();
           $tag_ids = array();
           
@@ -251,7 +245,7 @@ class SOCIAL_HASHTAG_CACHE {
             if(!$new_term['errors']){
               array_push( $category_ids, (int)$new_term['term_id'] );
             }
-          }mail("jkiritharan@gmail.com", "10", "nothing");
+          }
           
           // link post to the api_search_name category
           if( $this->plugin_options['search_name'] ){
@@ -265,12 +259,10 @@ class SOCIAL_HASHTAG_CACHE {
               }
             }
           }
-          mail("jkiritharan@gmail.com", "11", "nothing");
           // attach these categories to the new post
           if( count($category_ids) ) {
             wp_set_post_terms( $post_id, $category_ids, 'social_hashtag_categories' );
           }
-          mail("jkiritharan@gmail.com", "12", "nothing");
           // attach these tags to the new post
           if( count($platform->pic_tags) ) {
             wp_set_object_terms($post_id, $platform->pic_tags, 'social_hashtag_tags');
@@ -280,8 +272,6 @@ class SOCIAL_HASHTAG_CACHE {
           if( count($platform->pic_strs) ) {
             wp_set_object_terms($post_id, $platform->pic_strs, 'social_hashtag_tags');
           }
-          
-      mail("jkiritharan@gmail.com", "13", "nothing");
         }
 
         return $platform->pic_handle_platform . " complete! " . $retrieved . " records retrieved, " . $added . " records added ";
@@ -301,7 +291,6 @@ class SOCIAL_HASHTAG_CACHE {
     $platform = $this->choose_platform($platform_options['api_selected']);
     
     $search_url = $this->build_api_search_url($num);
-    // mail("jkiritharan@gmail.com", "api search", (string)$search_url);
     
     $count_items = 0;
 
@@ -316,18 +305,13 @@ class SOCIAL_HASHTAG_CACHE {
         $json_string = utf8_encode($json_string);
         $json_string=html_entity_decode($json_string);
         $response = json_decode($json_string);
-        // return (string)json_last_error();
         $photos = $platform->clean_response($response);
-        // mail("jkiritharan@gmail.com", "subject", (string)print_r($response,true));
-        // return $photos;
       }
       else{
        $json_string = $this->remote_get_contents($search_url);
        
        $response = json_decode($json_string);
-       // return $response;
        $photos = $platform->clean_response($response);
-       // return $photos;
       }
       
       if( !is_array($photos) ){
