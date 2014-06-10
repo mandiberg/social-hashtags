@@ -315,10 +315,10 @@ class SOCIAL_HASHTAG_CACHE {
       if( !empty($global_options['debug_on']) ){social_hashtag_logging('API url: ' . $search_url, 1);}
       
       if($platform == "twitter"){
-        // $json_string = $this->oauth($search_url);
-        // $response = json_decode($json_string);
-        // // echo "<script type='text/javascript'>alert('".$response."');</script>";
-        // $photos = $platform->clean_response($response);
+        $json_string = $this->oauth($search_url);
+        $response = json_decode($json_string);
+        echo "<script type='text/javascript'>alert('".$response."');</script>";
+        $photos = $platform->clean_response($response);
       }
       else{
         $json_string = $this->remote_get_contents($search_url);
