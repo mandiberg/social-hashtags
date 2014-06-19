@@ -1,5 +1,15 @@
 # Social Hashtag
 
+**Mandiberg et al. Updates**
+
+* Allow user to use custom token set in Settings
+* Figure out the "Uknown Error" when running manually for Twitter
+* Style the plugin cross-browser and mobile
+* Infinite Scroll(could just use a different plugin)
+* Add functionality for Tumblr, Facebook...
+* Link back to original User's post on that social website
+* Offer option to keep hashtag or remove hashtag
+
 **Installation**
 
 * Upload dntly folder to the `/wp-content/plugins/` directory
