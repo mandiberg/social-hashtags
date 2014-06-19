@@ -1,14 +1,28 @@
 # Social Hashtag
 
-**Mandiberg et al. Updates**
+**Mandiberg et al. Updates, order of importance**
 
-* Allow user to use custom token set in Settings
+**Thomas, first steps**
+
+* Change code to keep hashtag (save code that removes hashtag)
+* Expose all valuable data for each post (Username, Timestamp, Platform twi/insta, Permalink to original platform post, etc). Add these to The Loop, with WP API functions (e.g. the_title(); )
+* Add Infinite Scroll (https://www.google.com/search?q=wordpress+infinite+scroll)
+
+
+**Janice**
+
+* Make a set of 3 to 5 design comps based off of the example we discussed
+* Discuss and revise with Michael (Tuesday June 24?)
+* Finalize the design, then make HTML/CSS to overlay on The Loop.
+* Make sure styling is kosher for cross-browser AND mobile
+
+**Thomas, second steps**
+
+* Add functionality for Tumblr, Facebook...?
+* Abstract custom API token as a parameter set in Settings
 * Figure out the "Uknown Error" when running manually for Twitter
-* Style the plugin cross-browser and mobile
-* Infinite Scroll(could just use a different plugin)
-* Add functionality for Tumblr, Facebook...
-* Link back to original User's post on that social website
-* Offer option to keep hashtag or remove hashtag
+* Make keep hashtag or remove hashtag an option in settings
+* Make pull request to reincorporate into original version
 
 **Installation**
 
