@@ -10,6 +10,9 @@
 		<?php while(have_posts()): the_post(); ?>
 			<div class="a-social-post">
 				<a href="<?php the_permalink(); ?>"><?php the_content(); ?></a>
+				<?
+				the_meta();
+				?>
 				<p><?php the_title(); ?></p>
 			</div>
 		<?php endwhile; ?>

@@ -211,6 +211,8 @@ class SOCIAL_HASHTAG_CACHE {
           add_post_meta($post_id, 'social_hashtag_platform', $platform->pic_handle_platform, true);
           add_post_meta($post_id, 'social_hashtag_userhandle', $platform->pic_handle, true);
           add_post_meta($post_id, 'social_hashtag_location', $platform->pic_loc, true);
+          //figure out how to dynamically add url for user_link
+          //add_post_meta($post_id, 'social_hashtag_user_link', "https://twitter.com/".$platform->pic_handle, true);
           if( $platform->vid_embed ) {
             add_post_meta($post_id, 'social_hashtag_vid_embed', $platform->vid_embed, true);
           }
