@@ -13,8 +13,14 @@
 
 * Make a set of 3 to 5 design comps based off of the example we discussed
 * Discuss and revise with Michael (Tuesday June 24?)
+* Shadow Thomas' work with the WP API in The Loop in archive-social_hastag.php
 * Finalize the design, then make HTML/CSS to overlay on The Loop.
 * Make sure styling is kosher for cross-browser AND mobile
+
+**Claire**
+
+* Shadow Janice's design and CSS work
+* Shadow Thomas' work with the WP API in The Loop in archive-social_hastag.php
 
 **Thomas, second steps**
 
