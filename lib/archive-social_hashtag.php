@@ -10,9 +10,20 @@
 		<?php while(have_posts()): the_post(); ?>
 			<div class="a-social-post">
 				<a href="<?php the_permalink(); ?>"><?php the_content(); ?></a>
-				<?
-				the_meta();
-				?>
+				<ul>
+					<li>
+						<?echo get_post_meta(get_the_ID(), 'social_hashtag_userhandle', true);?> 
+					</li>
+					<li>
+						<?echo get_post_meta(get_the_ID(), 'social_hashtag_platform', true);?> 
+					</li>
+					<li>
+						<?echo get_post_meta(get_the_ID(), 'social_hashtag_timestamp', true);?> 
+					</li>
+					<li>
+						<?echo get_post_meta(get_the_ID(), 'social_hashtag_post_link', true);?> 
+					</li>
+				</ul>
 				<p><?php the_title(); ?></p>
 			</div>
 		<?php endwhile; ?>

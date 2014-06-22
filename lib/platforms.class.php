@@ -17,6 +17,7 @@ class PLATFORM_BASE {
   var $pic_platform;
   var $pic_strs;
   var $pic_tags;
+  var $pic_link;
   
   var $pic_full_title;
   var $pic_clean_title;
@@ -88,6 +89,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     $this->pic_handle_avatar    = $response_object->user->profile_image_url;
     $this->pic_handle_platform  = 'twitter';
     $this->pic_platform         = 'twitter';
+    $this->pic_link             = 'https://twitter.com/' . $response_object->user->screen_name . '/status/' . $response_object->id_str;
 
     if( $response_object->geo != '' ){
       $this->pic_loc              = implode(",", $response_object->geo);
@@ -395,6 +397,7 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
     $this->pic_platform         = 'instagram';
     $this->pic_full_title       = urlencode($response_object->caption->text);
     $this->pic_clean_title      = trim($clean_title) != '' ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform;
+    $this->pic_link             = $response_object->link;
     return true;
   }
   function clean_response($response_object){
