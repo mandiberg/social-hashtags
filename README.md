@@ -5,7 +5,7 @@
 **Thomas, first steps**
 
 * Change code to keep hashtag (save code that removes hashtag)
-* Expose all valuable data for each post (Username, Timestamp, Platform twi/insta, Permalink to original platform post, etc). Add these to The Loop, with WP API functions (e.g. the_title(); )
+* ~~Expose all valuable data for each post (Username, Timestamp, Platform twi/insta, Permalink to original platform post, etc). Add these to The Loop, with WP API functions (e.g. the_title(); )~~
 * Add Infinite Scroll (https://www.google.com/search?q=wordpress+infinite+scroll)
 
 
