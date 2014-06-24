@@ -9,21 +9,23 @@
 		<div class="the-social-posts">
 		<?php while(have_posts()): the_post(); ?>
 			<div class="a-social-post">
-				<a href="<?php the_permalink(); ?>"><?php the_content(); ?></a>
-				<ul>
-					<li>
-						<?echo get_post_meta(get_the_ID(), 'social_hashtag_userhandle', true);?> 
-					</li>
-					<li>
-						<?echo get_post_meta(get_the_ID(), 'social_hashtag_platform', true);?> 
-					</li>
-					<li>
-						<?echo get_post_meta(get_the_ID(), 'social_hashtag_timestamp', true);?> 
-					</li>
-					<li>
-						<?echo get_post_meta(get_the_ID(), 'social_hashtag_post_link', true);?> 
-					</li>
-				</ul>
+				<a href="<?php the_permalink(); ?>">
+					<?php
+						$content = get_post_field('post_content', get_the_ID()); 
+						if (strpos($content,'<img') !== false) {
+    						echo $content;
+						}
+						//the_content(); 
+					?>
+				</a>
+					<?php
+						echo "<a href='" . get_post_meta(get_the_ID(), 'social_hashtag_user_link', true) . "'>";
+								echo "@" . get_post_meta(get_the_ID(), 'social_hashtag_userhandle', true);
+						echo "</a>";
+						echo "<a href='" . get_post_meta(get_the_ID(), 'social_hashtag_post_link', true) . "'>";
+								echo " on " . get_post_meta(get_the_ID(), 'social_hashtag_platform', true);
+					?>
+				</a>
 				<p><?php the_title(); ?></p>
 			</div>
 		<?php endwhile; ?>

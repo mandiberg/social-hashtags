@@ -47,6 +47,25 @@ class PLATFORM_BASE {
     }
     return implode(' ',$U);
   }
+
+  function removeEmoji($text) {
+
+    $clean_text = "";
+
+    // Match Emoticons
+    $regexEmoticons = '/[\x{1F600}-\x{1F64F}]/u';
+    $clean_text = preg_replace($regexEmoticons, '', $text);
+
+    // Match Miscellaneous Symbols and Pictographs
+    $regexSymbols = '/[\x{1F300}-\x{1F5FF}]/u';
+    $clean_text = preg_replace($regexSymbols, '', $clean_text);
+
+    // Match Transport And Map Symbols
+    $regexTransport = '/[\x{1F680}-\x{1F6FF}]/u';
+    $clean_text = preg_replace($regexTransport, '', $clean_text);
+
+    return $clean_text;
+  }
   
   function get_cron_intervals(){
     return array(
@@ -77,15 +96,18 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     }
     
     // remove hash tags from title and create tags with them
+    //$pattern = "/\#([a-z1-9^\S])+/";
     $pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
-    $clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
-    //$clean_title = $this->strip_urls($response_object->text);
+    //$clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
+    $clean_title = $this->strip_urls($response_object->text);
     
     $this->pic_strs             = str_replace("#", "", $hashtags_in_title[0]);
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
-    $this->pic_handle           = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->screen_name);
-    $this->pic_username         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->name);
+    $this->pic_handle           = $response_object->user->screen_name;
+    $this->pic_username         = $response_object->user->name;
+    //$this->pic_handle           = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->screen_name);
+    //$this->pic_username         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->name);
     $this->pic_sha              = $response_object->id;
     $this->pic_handle_avatar    = $response_object->user->profile_image_url;
     $this->pic_handle_platform  = 'twitter';
@@ -103,7 +125,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     }
     //$this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
     $this->pic_full_title         = $response_object->text;
-    $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->source . ' using ' . $this->pic_handle_platform);
+    $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform);
 
 
     return true;
@@ -381,9 +403,11 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
   function parse_response($response_object, $plugin_options){
     $this->unset_variables();
     // remove hash tags from title and create tags with them
-    $pattern = "/\#([a-z1-9^\S])+/";
+    //$pattern = "/\#([a-z1-9^\S])+/";
+    $pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->caption->text, $hashtags_in_title);
-    $clean_title = preg_replace($pattern, "", $response_object->caption->text);
+    //$clean_title = preg_replace($pattern, "", $response_object->caption->text);
+    $clean_title = $response_object->caption->text;
     
     $this->pic_tags             = $response_object->tags;
     $this->pic_loc              = !empty($response_object->location->latitude)?$response_object->location->latitude . "," . $response_object->location->longitude:'';
