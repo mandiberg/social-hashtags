@@ -77,9 +77,10 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     }
     
     // remove hash tags from title and create tags with them
-    $pattern = "/\#([a-z1-9^\S])+/";
+    $pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
     $clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
+    //$clean_title = $this->strip_urls($response_object->text);
     
     $this->pic_strs             = str_replace("#", "", $hashtags_in_title[0]);
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
@@ -100,7 +101,8 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
         array_push($this->pic_tags, $tag->text);
       }      
     }
-    $this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
+    //$this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
+    $this->pic_full_title         = $response_object->text;
     $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->source . ' using ' . $this->pic_handle_platform);
 
 
