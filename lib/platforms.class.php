@@ -88,7 +88,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
       $this->pic_full             = $response_object->entities->media[0]->media_url;
     }
     else{
-      $no_pic = $response_object->text;
+      $no_pic = $this->removeEmoji($response_object->text);
     }
     
     if( $plugin_options['only_with_pics'] == 'Yes' && $no_pic ){
@@ -101,6 +101,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
     //$clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
     $clean_title = $this->strip_urls($response_object->text);
+    $clean_title = $this->removeEmoji($clean_title);
     
     $this->pic_strs             = str_replace("#", "", $hashtags_in_title[0]);
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
@@ -124,7 +125,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
       }      
     }
     //$this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
-    $this->pic_full_title         = $response_object->text;
+    $this->pic_full_title         = $this->removeEmoji($response_object->text);
     $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform);
 
 
