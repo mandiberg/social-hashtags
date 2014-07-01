@@ -4,7 +4,7 @@
 
 **Thomas, first steps**
 
-* Change code to keep hashtag (save code that removes hashtag)
+* ~~Change code to keep hashtag (save code that removes hashtag)~~
 * ~~Expose all valuable data for each post (Username, Timestamp, Platform twi/insta, Permalink to original platform post, etc). Add these to The Loop, with WP API functions (e.g. the_title(); )~~
 * Add Infinite Scroll (https://www.google.com/search?q=wordpress+infinite+scroll)
 
@@ -24,7 +24,7 @@
 
 **Thomas, second steps**
 
-* Add functionality for Tumblr, Facebook...?
+* Add functionality to push aggregated twitter and instagram content to Tumblr, Facebook
 * Abstract custom API token as a parameter set in Settings
 * Figure out the "Uknown Error" when running manually for Twitter
 * Make keep hashtag or remove hashtag an option in settings

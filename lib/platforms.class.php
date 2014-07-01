@@ -96,10 +96,16 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     }
     
     // remove hash tags from title and create tags with them
+
+    //This is the regex pattern for removing hashtags (and the word following them I believe? Not an expert on regex expressions -Thomas)
     //$pattern = "/\#([a-z1-9^\S])+/";
+
     $pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
+
+    //This uses the pattern to remove the hashtags/text from the text
     //$clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
+
     $clean_title = $this->strip_urls($response_object->text);
     $clean_title = $this->removeEmoji($clean_title);
     
@@ -107,8 +113,12 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
     $this->pic_handle           = $response_object->user->screen_name;
     $this->pic_username         = $response_object->user->name;
+
+    //I honestly don't know why these lines are in here, but they were removing miscellaneous characters from screennames, making it harder to trace back
+    //to the original accounts, so I have commented them out. -Thomas
     //$this->pic_handle           = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->screen_name);
     //$this->pic_username         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->name);
+
     $this->pic_sha              = $response_object->id;
     $this->pic_handle_avatar    = $response_object->user->profile_image_url;
     $this->pic_handle_platform  = 'twitter';
@@ -124,6 +134,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
         array_push($this->pic_tags, $tag->text);
       }      
     }
+    //This is the same pattern as was used on the handle/username. Removes that stuff (replaces with no characters) - Thomas
     //$this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
     $this->pic_full_title         = $this->removeEmoji($response_object->text);
     $this->pic_clean_title        = $no_pic ? $no_pic : (trim($clean_title) ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform);
@@ -403,12 +414,16 @@ class PLATFORM_TELEPORTD Extends PLATFORM_BASE {
 class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
   function parse_response($response_object, $plugin_options){
     $this->unset_variables();
+
     // remove hash tags from title and create tags with them
+    //This is the regex pattern for removing hashtags (and the word following them I believe? Not an expert on regex expressions -Thomas)
     //$pattern = "/\#([a-z1-9^\S])+/";
     $pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->caption->text, $hashtags_in_title);
+
+    //This uses the pattern to remove the hashtags/text from the text
     //$clean_title = preg_replace($pattern, "", $response_object->caption->text);
-    $clean_title = $response_object->caption->text;
+    $clean_title = $this->removeEmoji($response_object->caption->text);
     
     $this->pic_tags             = $response_object->tags;
     $this->pic_loc              = !empty($response_object->location->latitude)?$response_object->location->latitude . "," . $response_object->location->longitude:'';
@@ -422,7 +437,7 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
     $this->pic_handle_platform  = 'instagram';    
     $this->pic_username         = $response_object->user->full_name;
     $this->pic_platform         = 'instagram';
-    $this->pic_full_title       = urlencode($response_object->caption->text);
+    $this->pic_full_title       = urlencode($this->removeEmoji($response_object->caption->text));
     $this->pic_clean_title      = trim($clean_title) != '' ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform;
     $this->pic_link             = $response_object->link;
     return true;
