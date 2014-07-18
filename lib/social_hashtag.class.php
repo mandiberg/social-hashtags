@@ -281,6 +281,7 @@ class SOCIAL_HASHTAG_CACHE {
         return $platform->pic_handle_platform . " complete! " . $retrieved . " records retrieved, " . $added . " records added ";
 
     } catch (Exception $e) {
+      mail ( "storey.thomas@gmail.com" , "NYAP social-hashtag errors" , $e->getMessage());
         return 'Error: ' . $e->getMessage();
     }
     
