@@ -199,7 +199,7 @@ class SOCIAL_HASHTAG_CACHE {
             $post_content = $platform->pic_full_title;
           }
           $post = array(
-           'post_author' => 1,
+           'post_author' => !empty($plugin_options['author_id'])?$plugin_options['author_id']:1,
            'post_date' => $platform->pic_mysqldate ,
            'post_type' => 'social_hashtag',
            'post_title' => $platform->pic_clean_title,
