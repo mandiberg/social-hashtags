@@ -128,6 +128,7 @@ class SOCIAL_HASHTAG_CACHE {
     $wordpress_uploads = wp_upload_dir();
     
     $blacklist = explode(',', $plugin_options['blacklisted_users']);
+    $whitelist = explode(',', $plugin_options['whitelisted_users']);
     
     $retrieved = 0;
     $added = 0;
@@ -145,7 +146,14 @@ class SOCIAL_HASHTAG_CACHE {
             }
           }
           $retrieved++;
-          // Check to see if this user is blacklisted, skip to the next on if so   
+          // Check to see if this user is whitelisted, skip to the next one if not   
+          if( count($whitelist) ){    
+            if(  array_search ( $platform->pic_handle, $whitelist ) == false ){ 
+              continue;
+            } 
+          }
+
+          // Check to see if this user is blacklisted, skip to the next one if so   
           if( count($blacklist) ){    
             if(  array_search ( $platform->pic_handle, $blacklist ) ){ 
               if($plugin_options['debug_on']){
@@ -153,6 +161,7 @@ class SOCIAL_HASHTAG_CACHE {
                 continue; 
               }
           }
+
           // Check to see if this is a retweet, skip to the next on if so  
           if( @$platform_options['skip_retweets'] == 'Yes' ){
             if(  strstr ( $platform->pic_full_title , 'RT ') ){ if($plugin_options['debug_on']){

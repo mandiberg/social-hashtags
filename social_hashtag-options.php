@@ -49,6 +49,7 @@
   $always_private     = !empty($global_options['always_private'])?$global_options['always_private']:'No';
   $max_items          = !empty($global_options['max_items'])?$global_options['max_items']:'50';
   $blacklisted_users  = !empty($global_options['blacklisted_users'])?$global_options['blacklisted_users']:'';
+  $whitelisted_users  = !empty($global_options['whitelisted_users'])?$global_options['whitelisted_users']:'';
 
 ?>
 
@@ -252,6 +253,17 @@
       		<code>comma separated</code>
       	</th>
       </tr>
+
+      <tr class="active">
+        <td class="desc">
+          <p><textarea name="social_hashtag_global[whitelisted_users]" cols="80" rows="4"><?php print $whitelisted_users ?></textarea></p>
+        </td>
+        <th scope="row">
+          <label for="">Whitelisted usernames/handles</label><br/>
+          <code>comma separated</code>
+        </th>
+      </tr>
+
     </tbody>
 	</table>
 
