@@ -127,11 +127,13 @@ class SOCIAL_HASHTAG_CACHE {
     require_once(ABSPATH . "wp-admin" . '/includes/image.php');
     $wordpress_uploads = wp_upload_dir();
     
-    $blacklist = explode(',', $plugin_options['blacklisted_users']);
-    $whitelist = explode(',', $plugin_options['whitelisted_users']);
+    $blacklist = array_filter(explode(',', $plugin_options['blacklisted_users']));
+    $whitelist = array_filter(explode(',', $plugin_options['whitelisted_users']));
+    
     
     $retrieved = 0;
     $added = 0;
+    $blocked = 0;
     
     try {
   
@@ -147,17 +149,15 @@ class SOCIAL_HASHTAG_CACHE {
           }
           $retrieved++;
           // Check to see if this user is whitelisted, skip to the next one if not   
-          if( count($whitelist) ){    
-            if(  array_search ( $platform->pic_handle, $whitelist ) == false ){ 
+          if( !empty($whitelist) ){    
+            if(  array_search ( $platform->pic_handle, $whitelist ) === false ){
               continue;
             } 
           }
 
           // Check to see if this user is blacklisted, skip to the next one if so   
-          if( count($blacklist) ){    
-            if(  array_search ( $platform->pic_handle, $blacklist ) ){ 
-              if($plugin_options['debug_on']){
-                social_hashtag_logging($platform->pic_full_title . "\n[not added] blacklisted user: " . $platform->pic_handle, 1); }
+          if( !empty($blacklist) ){  
+            if(  array_search ( $platform->pic_handle, $blacklist ) ){  
                 continue; 
               }
           }
@@ -172,7 +172,7 @@ class SOCIAL_HASHTAG_CACHE {
           // Check to see if we already have this photo, skip to the next one if we do
           $existing_photo = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE meta_key = 'social_hashtag_sha' and meta_value = %s", $platform->pic_sha ) );          
           if( count($existing_photo) >= 1 ){ if($plugin_options['debug_on']){
-            social_hashtag_logging($platform->pic_full_title . "\n[not added] we already have this one ", 1); } 
+            social_hashtag_logging($platform->pic_full_title . "\n[not added] we already have this one ", 1); }
             continue; 
           }
           else{ if($plugin_options['debug_on']){social_hashtag_logging($platform->pic_full_title, 1);} }
@@ -287,11 +287,9 @@ class SOCIAL_HASHTAG_CACHE {
           }
         }
 
-        return $platform->pic_handle_platform . " complete! " . $retrieved . " records retrieved, " . $added . " records added ";
+        return $platform->pic_handle_platform . " complete! ". $blocked . " blocked, " . $retrieved . " records retrieved, " . $added . " records added ";
 
     } catch (Exception $e) {
-      mail ( "storey.thomas@gmail.com" , "NYAP social-hashtag errors" , $e->getMessage());
-        return 'Error: ' . $e->getMessage();
     }
     
   }

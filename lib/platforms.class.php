@@ -443,7 +443,7 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
     // remove hash tags from title and create tags with them
     //This is the regex pattern for removing hashtags (and the word following them I believe? Not an expert on regex expressions -Thomas)
     //$pattern = "/\#([a-z1-9^\S])+/";
-    $pattern = "/([a-z1-9^\S])+/";
+    $pattern = "/\#([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->caption->text, $hashtags_in_title);
 
     //This uses the pattern to remove the hashtags/text from the text
