@@ -45,6 +45,7 @@
   $global_options     = $social_hashtag_cache->get_social_hashtag_options(null, 'global');
   $slug               = !empty($global_options['slug'])?$global_options['slug']:$social_hashtag_cache->cpt_slug;
   $debug_on           = !empty($global_options['debug_on'])?$global_options['debug_on']:'0';
+  //$exclude_hashtags   = !empty($global_options['exclude_hashtags'])?$global_options['exclude_hashtags']:'0';
   $author_id          = !empty($global_options['author_id'])?$global_options['author_id']:1;
   $always_private     = !empty($global_options['always_private'])?$global_options['always_private']:'No';
   $max_items          = !empty($global_options['max_items'])?$global_options['max_items']:'50';
@@ -204,6 +205,20 @@
       		<code>Debugging info will be sent to the log<br/>(requires installing the <a href="http://wordpress.org/plugins/wordpress-logging-service/">WLS plugin</a>)</code>
       	</th>
       </tr>
+
+      <!--<tr class="active">
+        <td class="desc">
+          <select name="social_hashtag_global[exclude_hashtags]" class="disable_onchange" >
+            <option value="0" <?php selected( $exclude_hashtags, '0' ); ?>>No</option>
+            <option value="1" <?php selected( $exclude_hashtags, '1' ); ?>>Yes</option>
+          </select>
+        </td>
+        <th scope="row">
+          <label for="">Exclude Hashtags</label><br/>
+          <code>Will remove words with '#' at the front from the message.</code>
+        </th>
+      </tr>-->
+
       <tr class="active">
         <td class="desc">
       	  <select name="social_hashtag_global[always_private]" class="disable_onchange" >

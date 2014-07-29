@@ -58,19 +58,6 @@ function cleaner($url) {
   }
   return implode(' ',$U);
 }
-  
-  function strip_urls($url) {
-    $U = explode(' ',$url);
-
-    $W =array();
-    foreach ($U as $k => $u) {
-      if (stristr($u,'http') || (count(explode('.',$u)) > 1)) {
-        unset($U[$k]);
-        return $this->strip_urls( implode(' ',$U));
-      }
-    }
-    return implode(' ',$U);
-  }
 
   function removeEmoji($text) {
 
@@ -123,27 +110,23 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
 
     //This is the regex pattern for removing hashtags (and the word following them I believe? Not an expert on regex expressions -Thomas)
     $pattern = "/\#([a-z1-9^\S])+/";
-
-    //$pattern = "/([a-z1-9^\S])+/";
     preg_match_all($pattern, $response_object->text, $hashtags_in_title);
 
     //This uses the pattern to remove the hashtags/text from the text
-    //$clean_title = $this->strip_urls(preg_replace($pattern, "", $response_object->text));
-
-    $clean_title = $this->cleaner($response_object->text);
-    //$clean_title = $response_object->text;
-    $clean_title = $this->removeEmoji($clean_title);
+    if($plugin_options['exclude_hashtags'] == 'Yes'){
+        $clean_title = $this->cleaner(preg_replace($pattern, "", $response_object->text));
+    } else {
+        $clean_title = $this->cleaner($response_object->text);
+    }
+    if($plugin_options['remove_emoji'] == 'Yes'){
+        $clean_title = $this->removeEmoji($clean_title);
+    }
+    
     
     $this->pic_strs             = str_replace("#", "", $hashtags_in_title[0]);
     $this->pic_mysqldate        = date( 'Y-m-d H:i:s', strtotime($response_object->created_at) );
     $this->pic_handle           = $response_object->user->screen_name;
     $this->pic_username         = $response_object->user->name;
-
-    //I honestly don't know why these lines are in here, but they were removing miscellaneous characters from screennames, making it harder to trace back
-    //to the original accounts, so I have commented them out. -Thomas
-    //$this->pic_handle           = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->screen_name);
-    //$this->pic_username         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->user->name);
-
     $this->pic_sha              = $response_object->id;
     $this->pic_handle_avatar    = $response_object->user->profile_image_url;
     $this->pic_handle_platform  = 'twitter';
@@ -159,8 +142,7 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
         array_push($this->pic_tags, $tag->text);
       }      
     }
-    //This is the same pattern as was used on the handle/username. Removes that stuff (replaces with no characters) - Thomas
-    //$this->pic_full_title         = preg_replace('/[^\pL\p{Zs}]+/u', '', $response_object->text);
+
     $this->pic_full_title         = $this->removeEmoji($response_object->text);
     $this->pic_clean_title        = $no_pic ? $no_pic : ($clean_title ? $clean_title : $this->pic_handle . ' using ' . $this->pic_handle_platform);
 
@@ -238,6 +220,33 @@ class PLATFORM_TWITTER Extends PLATFORM_BASE {
             		<code>Skip text-only tweets</code>
             	</th>
             </tr>
+
+            <tr class="active">
+              <td class="desc">
+                <select name="social_hashtag_cache[<?php print $cache_num ?>][exclude_hashtags]" class="disable_onchange" >
+                  <option value="No" <?php selected( $cache_settings['exclude_hashtags'], 'No' ); ?>>No</option>
+                  <option value="Yes" <?php selected( $cache_settings['exclude_hashtags'], 'Yes' ); ?>>Yes</option>
+                </select> 
+              </td>
+              <th scope="row">
+                <label for="">Exclude Hashtags</label><br/>
+                <code>Will remove hashtagged words from retrieved posts.</code>
+              </th>
+            </tr>
+
+            <tr class="active">
+              <td class="desc">
+                <select name="social_hashtag_cache[<?php print $cache_num ?>][remove_emoji]" class="disable_onchange" >
+                  <option value="No" <?php selected( $cache_settings['remove_emoji'], 'No' ); ?>>No</option>
+                  <option value="Yes" <?php selected( $cache_settings['remove_emoji'], 'Yes' ); ?>>Yes</option>
+                </select> 
+              </td>
+              <th scope="row">
+                <label for="">Remove Emoji</label><br/>
+                <code>Will remove emoji unicode-range characters from retrieved posts.</code>
+              </th>
+            </tr>
+
             <tr class="active">
               <td class="desc">
             	  <select name="social_hashtag_cache[<?php print $cache_num ?>][skip_retweets]" class="disable_onchange" >
@@ -447,8 +456,15 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
     preg_match_all($pattern, $response_object->caption->text, $hashtags_in_title);
 
     //This uses the pattern to remove the hashtags/text from the text
-    //$clean_title = preg_replace($pattern, "", $response_object->caption->text);
-    $clean_title = $this->removeEmoji($response_object->caption->text);
+
+    if($plugin_options['exclude_hashtags'] == 'Yes'){
+        $clean_title = $this->cleaner(preg_replace($pattern, "", $response_object->caption->text));
+    } else {
+        $clean_title = $this->cleaner($response_object->caption->text);
+    }
+    if($plugin_options['remove_emoji'] == 'Yes'){
+        $clean_title = $this->removeEmoji($clean_title);
+    }
     
     $this->pic_tags             = $response_object->tags;
     $this->pic_loc              = !empty($response_object->location->latitude)?$response_object->location->latitude . "," . $response_object->location->longitude:'';
@@ -500,6 +516,33 @@ class PLATFORM_INSTAGRAM Extends PLATFORM_BASE {
                 <code>Instagram requires that you <a target="_blank" href="http://instagram.com/developer/clients/manage/">register a 'client' application</a><br/>(it's free & takes about 5 minutes to set up)</code>
             	</th>
             </tr>
+
+            <tr class="active">
+              <td class="desc">
+                <select name="social_hashtag_cache[<?php print $cache_num ?>][exclude_hashtags]" class="disable_onchange" >
+                  <option value="No" <?php selected( $cache_settings['exclude_hashtags'], 'No' ); ?>>No</option>
+                  <option value="Yes" <?php selected( $cache_settings['exclude_hashtags'], 'Yes' ); ?>>Yes</option>
+                </select> 
+              </td>
+              <th scope="row">
+                <label for="">Exclude Hashtags</label><br/>
+                <code>Will remove hashtagged words from retrieved posts.</code>
+              </th>
+            </tr>
+
+            <tr class="active">
+              <td class="desc">
+                <select name="social_hashtag_cache[<?php print $cache_num ?>][remove_emoji]" class="disable_onchange" >
+                  <option value="No" <?php selected( $cache_settings['remove_emoji'], 'No' ); ?>>No</option>
+                  <option value="Yes" <?php selected( $cache_settings['remove_emoji'], 'Yes' ); ?>>Yes</option>
+                </select> 
+              </td>
+              <th scope="row">
+                <label for="">Remove Emoji</label><br/>
+                <code>Will remove emoji unicode-range characters from retrieved posts.</code>
+              </th>
+            </tr>
+
             <tr class="active">
               <td class="desc">
                 <p><input type="text" name="social_hashtag_cache[<?php print $cache_num ?>][search_name]" value="<?php print ($cache_settings['search_name'] ? $cache_settings['search_name'] : $cache_settings['api_selected']) ?>" class="regular-text disable_onchange" /></p>
