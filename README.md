@@ -1,45 +1,49 @@
-# Social Hashtag
+# Social Hashtags -- NYAP Branch
 
-**Mandiberg et al. Updates, order of importance**
+### Info
 
-**Thomas, first steps**
+Contributors: shanaver, mandiberg, thomasrstorey, hachacha, janiceaa, clairegustavson
 
-* ~~Change code to keep hashtag (save code that removes hashtag)~~
-* ~~Expose all valuable data for each post (Username, Timestamp, Platform twi/insta, Permalink to original platform post, etc). Add these to The Loop, with WP API functions (e.g. the_title(); )~~
-* Add Infinite Scroll (https://www.google.com/search?q=wordpress+infinite+scroll)
+Tags: instagram, youtube, hashtags, videos, photos, images, API, twitter, teleportd
+
+Requires at least: 3.0.1
+
+Tested up to: 3.9
+
+License: GPLv2 or later
+
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+
+### Changes
+
+* Added option to keep or remove hashtagged words in retrieved posts.
+* Added functionality to store more metadata from posts retrieved from Twitter and Instagram, including:
+  * URL to post on Twitter/Instagram
+  * URL to user on Twitter/Instagram
+  * Timestamp for post from Twitter/Instagram
+* Exposed metadata from retrieved posts to be displayed in the archive page.
+* Added option to keep or remove Emoji from retrieved posts.
+* Added option to whitelist usernames.
+* Added option to pick a wordpress user to use as the author for social-hashtag posts.
 
 
-**Janice**
+### Planned Changes
 
-* Make a set of 3 to 5 design comps based off of the example we discussed
-* Discuss and revise with Michael (Tuesday June 24?)
-* Shadow Thomas' work with the WP API in The Loop in archive-social_hastag.php
-* Finalize the design, then make HTML/CSS to overlay on The Loop.
-* Make sure styling is kosher for cross-browser AND mobile
-
-**Claire**
-
-* Shadow Janice's design and CSS work
-* Shadow Thomas' work with the WP API in The Loop in archive-social_hastag.php
-
-**Thomas, second steps**
-
-* Add functionality to push aggregated twitter and instagram content to Tumblr, Facebook
+* Add Infinite Scroll
 * Abstract custom API token as a parameter set in Settings
-* Figure out the "Uknown Error" when running manually for Twitter
-* Make keep hashtag or remove hashtag an option in settings
-* Make pull request to reincorporate into original version
+* Iron out errors when retrieving posts manually from Twitter
 
-**Installation**
 
-* Upload dntly folder to the `/wp-content/plugins/` directory
+###Installation
+
+* Upload all files to a `social-hashtags` folder in the `/wp-content/plugins/` directory
 * Activate the plugin through the 'Plugins' menu in WordPress
 
-**Usage**
+###Usage
 
 * Add an API source & hashtag to pull from
 * Run manually or set a cron schedule to run automatically
 
-**Notes**
+###Notes
 
 Duplicates can occur if you run it manually while it's running already.  If you get duplciates, you can delete either one, or delete both and re-run it manually - just make sure you empty the trash because it looks in the trash for existing posts as well.
