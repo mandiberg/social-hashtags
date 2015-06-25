@@ -1,8 +1,8 @@
-# Social Hashtags -- NYAP Branch
+# Social Hashtags
 
 ### Info
 
-Contributors: shanaver, mandiberg, thomasrstorey, hachacha, janiceaa, clairegustavson
+Contributors: shanaver, mandiberg, thomasrstorey, hachacha, janiceaa
 
 Tags: instagram, youtube, hashtags, videos, photos, images, API, twitter, teleportd
 
@@ -14,7 +14,9 @@ License: GPLv2 or later
 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-### Changes
+### Changes made by Team Mandiberg 
+
+(please note that the contributor & granular commit information is here: https://github.com/mandiberg/social-hashtags)
 
 * Added option to keep or remove hashtagged words in retrieved posts.
 * Added functionality to store more metadata from posts retrieved from Twitter and Instagram, including:
@@ -27,7 +29,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 * Added option to pick a wordpress user to use as the author for social-hashtag posts.
 
 
-### Planned Changes
+### Future Possible Changes
 
 * Add Infinite Scroll
 * Abstract custom API token as a parameter set in Settings
